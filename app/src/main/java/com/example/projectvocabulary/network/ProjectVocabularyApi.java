@@ -1,7 +1,6 @@
 package com.example.projectvocabulary.network;
 
 import com.example.projectvocabulary.domain.user.User;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -13,6 +12,10 @@ import retrofit2.http.Path;
  */
 
 public interface ProjectVocabularyApi {
-    @POST("login")
-    Call<User> login(@Body LoginRequestDto request);
+
+	@POST("login")
+	Call<User> login(@Body LoginRequestDto request);
+
+	@GET("users/{userId}")
+	Call<User> users(@Path("userId") Long userId);
 }

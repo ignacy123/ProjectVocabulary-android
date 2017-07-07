@@ -161,7 +161,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 								Log.d("TAG", response.body()
 										.getEmail());
 								Intent intent = new Intent(LoginActivity.this, SessionActivity.class);
-								LoginActivity.this.startActivity(intent);
+
+								// LoginActivity.this.startActivity(intent); TODO można odkomentować
+								czyCookiesDzialaja(response.body()); // TODO a to usunąć wraz z metodą czyCookiesDzialaja
 							} else {
 								new AlertDialog.Builder(LoginActivity.this).setMessage("BŁĄÐ")
 										.show();
@@ -178,6 +180,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 					});
 		}
 
+	}
+
+	// TODO usunac te metode
+	private void czyCookiesDzialaja(User user) {
+		api.users(user.getId())
+				.enqueue(new Callback<User>() {
+
+					@Override
+					public void onResponse(Call<User> call, Response<User> response) {
+
+						if (response.isSuccessful()) {
+
+							final String msg = "Cześć " + response.body()
+									.getFirstName();
+							new AlertDialog.Builder(LoginActivity.this).setMessage(msg)
+									.show();
+						} else if (response.code() == 401) {
+							new AlertDialog.Builder(LoginActivity.this).setMessage("nie zalogowany :(")
+									.show();
+						}
+					}
+
+					@Override
+					public void onFailure(Call<User> call, Throwable t) {
+
+					}
+				});
 	}
 
 	private boolean isPasswordValid(String password) {

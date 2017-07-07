@@ -5,19 +5,25 @@ package com.example.projectvocabulary.domain.user;
  */
 
 public class User {
-    String email;
-    String firstName;
-    String lastName;
 
-    public String getEmail() {
-        return email;
-    }
+	Long id;
+	String email;
+	String firstName;
+	String lastName;
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getEmail() {
+		return email;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
 }
