@@ -16,4 +16,13 @@
     <string name="register">Register</string>
     <string name="title_activity_register">Sign in</string>
     <string name="title_activity_session">SessionActivity</string>
+    <string name="title_activity_root">RootActivity</string>
+    <string name="begin">BEGIN YOUR SESSION</string>
+    <string name="cur_email">Your current email:</string>
+    <string name="cur_fir_name">Your  current first name:</string>
+    <string name="cur_las_name">Your current last name:</string>
+    <string name="update">Update</string>
+    <string name="new_email">Your new email:</string>
+    <string name="new_fir_name">Your new first name:</string>
+    <string name="new_las_name">Your new last name:</string>
 </resources>

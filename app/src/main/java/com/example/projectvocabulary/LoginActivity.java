@@ -160,10 +160,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 							if (response.isSuccessful()) {
 								Log.d("TAG", response.body()
 										.getEmail());
-								Intent intent = new Intent(LoginActivity.this, SessionActivity.class);
+								api.setUserId(response.body().getId());
+								Intent intent = new Intent(LoginActivity.this, RootActivity.class);
 
-								// LoginActivity.this.startActivity(intent); TODO można odkomentować
-								czyCookiesDzialaja(response.body()); // TODO a to usunąć wraz z metodą czyCookiesDzialaja
+								LoginActivity.this.startActivity(intent);
 							} else {
 								new AlertDialog.Builder(LoginActivity.this).setMessage("BŁĄÐ")
 										.show();
@@ -196,6 +196,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 									.getFirstName();
 							new AlertDialog.Builder(LoginActivity.this).setMessage(msg)
 									.show();
+							Intent intent = new Intent(getApplicationContext(), RootActivity.class);
+							startActivity(intent);
 						} else if (response.code() == 401) {
 							new AlertDialog.Builder(LoginActivity.this).setMessage("nie zalogowany :(")
 									.show();

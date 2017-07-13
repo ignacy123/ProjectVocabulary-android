@@ -1,5 +1,6 @@
 package com.example.projectvocabulary.network;
 
+import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.User;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
@@ -24,6 +25,8 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 	private static ProjectVocabularyApiImpl instance;
 
 	private ProjectVocabularyApi service;
+
+	private User user = new User();
 
 	public static final ProjectVocabularyApi getInstance() {
 		if (instance == null) {
@@ -59,5 +62,25 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 	@Override
 	public Call<User> users(@Path("userId") Long userId) {
 		return service.users(userId);
+	}
+
+	@Override
+	public Call<User> update(@Path("userId") Long userId) {
+		return service.update(userId);
+	}
+
+	@Override
+	public void setUserId(Long id) {
+		user.setId(id);
+	}
+
+	@Override
+	public Long getUserId() {
+		return user.getId();
+	}
+
+	@Override
+	public Call<User> session(@Body SessionRequest request) {
+		return service.session(request);
 	}
 }
