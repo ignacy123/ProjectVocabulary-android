@@ -1,7 +1,9 @@
 package com.example.projectvocabulary.network;
 
 import com.example.projectvocabulary.domain.user.SessionRequest;
+import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
+
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -13,6 +15,7 @@ import retrofit2.http.Path;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.List;
 
 /**
  * Network service singleton
@@ -65,22 +68,22 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 	}
 
 	@Override
-	public Call<User> update(@Path("userId") Long userId) {
-		return service.update(userId);
+	public Call<User> update(@Path("userId") Long userId, @Body User user) {
+		return service.update(userId, user);
 	}
 
 	@Override
-	public void setUserId(Long id) {
-		user.setId(id);
+	public void logout() {
+		service.logout();
 	}
 
 	@Override
-	public Long getUserId() {
-		return user.getId();
+	public Call<User> register(@Body RegistrationDto dto) {
+		return service.register(dto);
 	}
 
 	@Override
-	public Call<User> session(@Body SessionRequest request) {
+	public Call<List<SessionWord>> session(@Body SessionRequest request) {
 		return service.session(request);
 	}
 }

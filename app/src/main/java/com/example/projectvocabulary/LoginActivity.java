@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,20 +24,22 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A login screen that offers login via email/password.
@@ -160,7 +164,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 							if (response.isSuccessful()) {
 								Log.d("TAG", response.body()
 										.getEmail());
-								api.setUserId(response.body().getId());
+
+								SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+								SharedPreferences.Editor editor = sharedPref.edit();
+
+								editor.putLong("userId", response.body()
+										.getId());
+								editor.commit();
 								Intent intent = new Intent(LoginActivity.this, RootActivity.class);
 
 								LoginActivity.this.startActivity(intent);
@@ -180,35 +190,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 					});
 		}
 
-	}
-
-	// TODO usunac te metode
-	private void czyCookiesDzialaja(User user) {
-		api.users(user.getId())
-				.enqueue(new Callback<User>() {
-
-					@Override
-					public void onResponse(Call<User> call, Response<User> response) {
-
-						if (response.isSuccessful()) {
-
-							final String msg = "Cześć " + response.body()
-									.getFirstName();
-							new AlertDialog.Builder(LoginActivity.this).setMessage(msg)
-									.show();
-							Intent intent = new Intent(getApplicationContext(), RootActivity.class);
-							startActivity(intent);
-						} else if (response.code() == 401) {
-							new AlertDialog.Builder(LoginActivity.this).setMessage("nie zalogowany :(")
-									.show();
-						}
-					}
-
-					@Override
-					public void onFailure(Call<User> call, Throwable t) {
-
-					}
-				});
 	}
 
 	private boolean isPasswordValid(String password) {

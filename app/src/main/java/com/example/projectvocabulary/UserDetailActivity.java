@@ -1,9 +1,10 @@
 package com.example.projectvocabulary;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -35,13 +36,16 @@ public class UserDetailActivity extends AppCompatActivity {
 
 	ProjectVocabularyApi api;
 
+	long userId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
 		api = ProjectVocabularyApiImpl.getInstance();
-
-		api.users(api.getUserId())
+		SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+		userId = sharedPref.getLong("userId", 0);
+		api.users(userId)
 				.enqueue(new Callback<User>() {
 
 					@Override
@@ -49,9 +53,12 @@ public class UserDetailActivity extends AppCompatActivity {
 						if (response.isSuccessful()) {
 							Log.d("TAG", response.body()
 									.getEmail());
-							textview3.setText(response.body().getEmail());
-							textview5.setText(response.body().getFirstName());
-							textview7.setText(response.body().getLastName());
+							textview3.setText(response.body()
+									.getEmail());
+							textview5.setText(response.body()
+									.getFirstName());
+							textview7.setText(response.body()
+									.getLastName());
 
 						} else {
 							new AlertDialog.Builder(UserDetailActivity.this).setMessage("BŁĄÐ")
@@ -68,17 +75,19 @@ public class UserDetailActivity extends AppCompatActivity {
 				});
 	}
 
-	private void update(View view){
+	private void update(View view) {
 		User user = new User();
 
-		user.setEmail(edittext6.getText().toString());
+		user.setEmail(edittext6.getText()
+				.toString());
 
-		user.setFirstName(edittext7.getText().toString());
+		user.setFirstName(edittext7.getText()
+				.toString());
 
-		user.setLastName(edittext8.getText().toString());
+		user.setLastName(edittext8.getText()
+				.toString());
 
-
-		api.update(api.getUserId(), user)
+		api.update(userId, user)
 				.enqueue(new Callback<User>() {
 
 					@Override

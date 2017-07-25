@@ -1,23 +1,3 @@
-<!--<com.github.fafaldo.fabtoolbar.widget.FABToolbarLayout android:id="@+id/fabtoolbar"--><!--android:layout_height="match_parent"--><!--android:layout_width="match_parent"--><!--app:containerId="@+id/fabtoolbar_container"--><!--app:fabId="@+id/fabtoolbar_fab"--><!--app:fabToolbarId="@+id/fabtoolbar_toolbar"--><!--app:fadeInFraction="0.2"--><!--app:hideDuration="200"--><!--app:horizontalMargin="30dp"--><!--app:showDuration="600"--><!--app:verticalMargin="30dp"--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools">-->
-
-<!--...-->
-
-<!--<android.support.constraint.ConstraintLayout--><!--android:id="@+id/fabtoolbar_container"--><!--android:layout_alignParentBottom="true"--><!--android:layout_alignParentRight="true"--><!--android:layout_height="wrap_content"--><!--android:layout_width="match_parent">-->
-
-<!--<android.support.design.widget.FloatingActionButton--><!--android:id="@+id/fabtoolbar_fab"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:src="@drawable/abc_ic_menu_share_mtrl_alpha"--><!--app:fabSize="normal"--><!--tools:layout_editor_absoluteX="312dp"--><!--tools:layout_editor_absoluteY="0dp" />-->
-
-<!--</android.support.constraint.ConstraintLayout>-->
-
-<!--<LinearLayout--><!--android:id="@+id/fabtoolbar_toolbar"--><!--android:layout_height="70dp"--><!--android:layout_width="match_parent"--><!--android:orientation="horizontal"--><!--android:layout_marginBottom="127dp"--><!--android:layout_above="@+id/fabtoolbar_container"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true">-->
-
-<!--<ImageView--><!--android:id="@+id/one"--><!--android:layout_width="0dp"--><!--android:layout_height="match_parent"--><!--android:layout_weight="1"--><!--android:scaleType="centerInside" />--><!--&lt;!&ndash;android:src="@drawable/test" />&ndash;&gt;-->
-
-<!--</LinearLayout>-->
-
-<!--<Button--><!--android:id="@+id/button2"--><!--android:layout_width="226dp"--><!--android:layout_height="145dp"--><!--android:layout_above="@+id/fabtoolbar_toolbar"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:layout_marginBottom="47dp"--><!--android:layout_marginLeft="65dp"--><!--android:layout_marginStart="65dp"--><!--android:background="#228B22"--><!--android:text="@string/begin"--><!--android:textSize="14sp"--><!--app:layout_constraintLeft_toLeftOf="parent"--><!--app:layout_constraintRight_toRightOf="parent"--><!--app:layout_constraintTop_toTopOf="parent"--><!--tools:layout_constraintLeft_creator="1"--><!--tools:layout_constraintRight_creator="1"--><!--tools:layout_constraintTop_creator="1" />-->
-
-<!--</com.github.fafaldo.fabtoolbar.widget.FABToolbarLayout>-->
-
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -42,4 +22,71 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1" />
+
+    <com.github.fafaldo.fabtoolbar.widget.FABToolbarLayout
+        android:id="@+id/fabtoolbar"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:containerId="@+id/fabtoolbar_container"
+        app:fabId="@+id/fabtoolbar_fab"
+        app:fabToolbarId="@+id/fabtoolbar_toolbar"
+        app:fadeInFraction="0.2"
+        app:hideDuration="200"
+        app:horizontalMargin="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:showDuration="600"
+        app:verticalMargin="15dp"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1">
+
+
+        <RelativeLayout
+            android:id="@+id/fabtoolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabtoolbar_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_ic_menu_share_mtrl_alpha"
+                app:fabSize="normal" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fabtoolbar_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-15dp">
+
+            <ImageView
+                android:id="@+id/one"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_exit_to_app_black_24dp" />
+
+            <ImageView
+                android:id="@+id/two"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_person_black_24dp" />
+
+        </LinearLayout>
+
+    </com.github.fafaldo.fabtoolbar.widget.FABToolbarLayout>
+
 </android.support.constraint.ConstraintLayout>

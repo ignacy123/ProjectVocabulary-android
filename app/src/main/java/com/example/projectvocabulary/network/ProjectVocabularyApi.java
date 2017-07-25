@@ -1,7 +1,11 @@
 package com.example.projectvocabulary.network;
 
 import com.example.projectvocabulary.domain.user.SessionRequest;
+import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -22,12 +26,14 @@ public interface ProjectVocabularyApi {
 	Call<User> users(@Path("userId") Long userId);
 
 	@POST("dictionary/session")
-	Call<User> session(@Body SessionRequest request);
+	Call<List<SessionWord>> session(@Body SessionRequest request);
 
 	@PUT("users/{userId}")
-	Call<User> update(@Path("userId")Long userId, @Body User user);
+	Call<User> update(@Path("userId") Long userId, @Body User user);
 
-	void setUserId(Long id);
+	@POST("logout")
+	void logout();
 
-	Long getUserId();
+	@POST("/register")
+	Call<User> register(@Body RegistrationDto dto);
 }
