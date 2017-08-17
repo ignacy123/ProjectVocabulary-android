@@ -73,8 +73,8 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 	}
 
 	@Override
-	public void logout() {
-		service.logout();
+	public Call<Void> logout() {
+		return service.logout();
 	}
 
 	@Override

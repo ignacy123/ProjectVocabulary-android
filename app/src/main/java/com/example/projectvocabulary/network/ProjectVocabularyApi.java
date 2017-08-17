@@ -32,7 +32,7 @@ public interface ProjectVocabularyApi {
 	Call<User> update(@Path("userId") Long userId, @Body User user);
 
 	@POST("logout")
-	void logout();
+	Call<Void> logout();
 
 	@POST("/register")
 	Call<User> register(@Body RegistrationDto dto);

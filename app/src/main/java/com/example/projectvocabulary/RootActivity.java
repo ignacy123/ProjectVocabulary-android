@@ -13,6 +13,9 @@ import com.github.fafaldo.fabtoolbar.widget.FABToolbarLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 public class RootActivity extends AppCompatActivity {
@@ -38,7 +41,18 @@ public class RootActivity extends AppCompatActivity {
 
 			@Override
 			public void onClick(View v) {
-				api.logout();
+				api.logout()
+						.enqueue(new Callback<Void>() {
+
+							@Override
+							public void onResponse(Call<Void> call, Response<Void> response) {
+							}
+
+							@Override
+							public void onFailure(Call<Void> call, Throwable t) {
+
+							}
+						});
 				Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 				startActivity(intent);
 			}
