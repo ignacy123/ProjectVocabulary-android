@@ -171,6 +171,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 								SharedPreferences.Editor editor = sharedPref.edit();
 
 								editor.putLong(Preferences.USER_ID, user.getId());
+								editor.putString(Preferences.PASSWORD, password);
 								editor.commit();
 
 								UserRepository.getInstance(getApplicationContext())
@@ -179,6 +180,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 								Intent intent = new Intent(LoginActivity.this, RootActivity.class);
 
 								LoginActivity.this.startActivity(intent);
+
 							} else {
 								new AlertDialog.Builder(LoginActivity.this).setMessage("BŁĄÐ")
 										.show();

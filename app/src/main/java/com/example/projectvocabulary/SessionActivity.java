@@ -1,7 +1,8 @@
 package com.example.projectvocabulary;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +12,12 @@ import android.widget.TextView;
 
 import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
+import com.example.projectvocabulary.domain.user.User;
+import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
+import com.example.projectvocabulary.preferences.Preferences;
+import com.example.projectvocabulary.sql.UserRepository;
 
 import java.util.List;
 
@@ -67,8 +72,44 @@ public class SessionActivity extends AppCompatActivity {
 							nextQuestion();
 
 						} else {
-							new AlertDialog.Builder(SessionActivity.this).setMessage("BŁĄÐ")
-									.show();
+							if (response.code() == 401) {
+								String email = UserRepository.getInstance(SessionActivity.this)
+										.fetch()
+										.getEmail();
+								SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+								String password = sharedPref.getString(Preferences.PASSWORD, "");
+								api.login(new LoginRequestDto(email, password))
+										.enqueue(new Callback<User>() {
+
+											@Override
+											public void onResponse(Call<User> call, Response<User> response) {
+												User user = response.body();
+												if (response.isSuccessful()) {
+													Log.d("TAG", user.getEmail());
+
+													SharedPreferences sharedPref =
+															PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+													SharedPreferences.Editor editor = sharedPref.edit();
+
+													editor.putLong(Preferences.USER_ID, user.getId());
+													editor.putString(Preferences.PASSWORD, password);
+													editor.commit();
+
+													UserRepository.getInstance(getApplicationContext())
+															.persist(user);
+													getWordsAndStartSession();
+												} else {
+												}
+												System.out.println(user);
+												Timber.d("Connection successful %s", response);
+											}
+
+											@Override
+											public void onFailure(Call<User> call, Throwable t) {
+												Timber.d("Connection failed");
+											}
+										});
+							}
 						}
 						System.out.println(response.body());
 						Timber.d("Connection successful %s", response);

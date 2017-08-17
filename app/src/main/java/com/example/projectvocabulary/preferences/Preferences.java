@@ -7,4 +7,7 @@ package com.example.projectvocabulary.preferences;
 public interface Preferences {
 	String USER_ID = "USER_ID";
 
+	@Deprecated
+	String PASSWORD = "PASSWORD";
+
 }
