@@ -26,14 +26,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.projectvocabulary.domain.user.User;
+import com.example.projectvocabulary.helper.StringUtils;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
 import com.example.projectvocabulary.network.RegistrationDto;
+import com.example.projectvocabulary.network.RegistrationWithUidDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,6 +87,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+		ButterKnife.bind(this);
 		// Set up the login form.
 
 		api = ProjectVocabularyApiImpl.getInstance();
@@ -102,50 +106,102 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	}
 
 	private void attemptLogin() {
-		RegistrationDto dto = new RegistrationDto();
-		dto.setEmail(email.getText()
-				.toString());
-		dto.setFirstName(firstName.getText()
-				.toString());
-		dto.setLastName(lastName.getText()
-				.toString());
-		dto.setPassword(password.getText()
-				.toString());
+		if (!StringUtils.isEmpty(uid.getText()
+				.toString())) {
+			RegistrationWithUidDto dto = new RegistrationWithUidDto();
+			dto.setEmail(email.getText()
+					.toString());
+			dto.setFirstName(firstName.getText()
+					.toString());
+			dto.setLastName(lastName.getText()
+					.toString());
+			dto.setPassword(password.getText()
+					.toString());
+			dto.setUid(uid.getText()
+					.toString());
 
-		api.register(dto)
-				.enqueue(new Callback<User>() {
+			api.register(dto)
+					.enqueue(new Callback<User>() {
 
-					@Override
-					public void onResponse(Call<User> call, Response<User> response) {
-						showProgress(false);
-						if (response.isSuccessful()) {
-							Log.d("TAG", response.body()
-									.getEmail());
+						@Override
+						public void onResponse(Call<User> call, Response<User> response) {
+							showProgress(false);
+							if (response.isSuccessful()) {
+								Log.d("TAG", response.body()
+										.getEmail());
 
-							SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-							SharedPreferences.Editor editor = sharedPref.edit();
+								SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+								SharedPreferences.Editor editor = sharedPref.edit();
 
-							editor.putLong("userId", response.body()
-									.getId());
-							editor.commit();
-							Intent intent = new Intent(RegisterActivity.this, RootActivity.class);
+								editor.putLong("userId", response.body()
+										.getId());
+								editor.commit();
+								Intent intent = new Intent(RegisterActivity.this, RootActivity.class);
 
-							RegisterActivity.this.startActivity(intent);
-						} else {
-							new AlertDialog.Builder(RegisterActivity.this).setMessage("BŁĄÐ")
-									.show();
+								RegisterActivity.this.startActivity(intent);
+							} else {
+								new AlertDialog.Builder(RegisterActivity.this).setMessage("BŁĄÐ")
+										.show();
+							}
+							System.out.println(response.body());
+							Timber.d("Connection successful %s", response);
 						}
-						System.out.println(response.body());
-						Timber.d("Connection successful %s", response);
-					}
 
-					@Override
-					public void onFailure(Call<User> call, Throwable t) {
-						showProgress(false);
-						Timber.d("Connection failed");
-					}
+						@Override
+						public void onFailure(Call<User> call, Throwable t) {
+							showProgress(false);
+							Timber.d("Connection failed");
+						}
 
-				});
+					});
+		} else
+
+		{
+			RegistrationDto dto = new RegistrationDto();
+			dto.setEmail(email.getText()
+					.toString());
+			dto.setFirstName(firstName.getText()
+					.toString());
+			dto.setLastName(lastName.getText()
+					.toString());
+			dto.setPassword(password.getText()
+					.toString());
+
+			api.register(dto)
+					.enqueue(new Callback<User>() {
+
+						@Override
+						public void onResponse(Call<User> call, Response<User> response) {
+							showProgress(false);
+							if (response.isSuccessful()) {
+								Log.d("TAG", response.body()
+										.getEmail());
+
+								SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+								SharedPreferences.Editor editor = sharedPref.edit();
+
+								editor.putLong("userId", response.body()
+										.getId());
+								editor.commit();
+								Intent intent = new Intent(RegisterActivity.this, RootActivity.class);
+
+								RegisterActivity.this.startActivity(intent);
+							} else {
+								new AlertDialog.Builder(RegisterActivity.this).setMessage("BŁĄÐ")
+										.show();
+							}
+							System.out.println(response.body());
+							Timber.d("Connection successful %s", response);
+						}
+
+						@Override
+						public void onFailure(Call<User> call, Throwable t) {
+							showProgress(false);
+							Timber.d("Connection failed");
+						}
+
+					});
+		}
 	}
 
 	private boolean isEmailValid(String email) {

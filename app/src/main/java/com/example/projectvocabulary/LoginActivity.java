@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -14,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +29,8 @@ import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
+import com.example.projectvocabulary.preferences.Preferences;
+import com.example.projectvocabulary.sql.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,16 +163,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 						@Override
 						public void onResponse(Call<User> call, Response<User> response) {
 							showProgress(false);
+							User user = response.body();
 							if (response.isSuccessful()) {
-								Log.d("TAG", response.body()
-										.getEmail());
+								Log.d("TAG", user.getEmail());
 
-								SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+								SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 								SharedPreferences.Editor editor = sharedPref.edit();
 
-								editor.putLong("userId", response.body()
-										.getId());
+								editor.putLong(Preferences.USER_ID, user.getId());
 								editor.commit();
+
+								UserRepository.getInstance(getApplicationContext())
+										.persist(user);
+
 								Intent intent = new Intent(LoginActivity.this, RootActivity.class);
 
 								LoginActivity.this.startActivity(intent);
@@ -178,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 								new AlertDialog.Builder(LoginActivity.this).setMessage("BŁĄÐ")
 										.show();
 							}
-							System.out.println(response.body());
+							System.out.println(user);
 							Timber.d("Connection successful %s", response);
 						}
 

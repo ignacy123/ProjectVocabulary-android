@@ -36,4 +36,7 @@ public interface ProjectVocabularyApi {
 
 	@POST("/register")
 	Call<User> register(@Body RegistrationDto dto);
+
+	@POST("/registerWithUid")
+	Call<User> register(@Body RegistrationWithUidDto dto);
 }

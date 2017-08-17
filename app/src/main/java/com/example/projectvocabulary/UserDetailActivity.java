@@ -1,19 +1,23 @@
 package com.example.projectvocabulary;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
+import com.example.projectvocabulary.preferences.Preferences;
+import com.example.projectvocabulary.sql.UserRepository;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +37,8 @@ public class UserDetailActivity extends AppCompatActivity {
 	TextView edittext7;
 	@BindView(R.id.editText8)
 	TextView edittext8;
+	@BindView(R.id.button4)
+	Button button;
 
 	ProjectVocabularyApi api;
 
@@ -42,37 +48,25 @@ public class UserDetailActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
+		ButterKnife.bind(this);
 		api = ProjectVocabularyApiImpl.getInstance();
-		SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-		userId = sharedPref.getLong("userId", 0);
-		api.users(userId)
-				.enqueue(new Callback<User>() {
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		userId = sharedPref.getLong(Preferences.USER_ID, 0);
+		User user = UserRepository.getInstance(this)
+				.fetch();
+		textview3.setText(user.getEmail());
+		textview5.setText(user.getFirstName());
+		textview7.setText(user.getLastName());
 
-					@Override
-					public void onResponse(Call<User> call, Response<User> response) {
-						if (response.isSuccessful()) {
-							Log.d("TAG", response.body()
-									.getEmail());
-							textview3.setText(response.body()
-									.getEmail());
-							textview5.setText(response.body()
-									.getFirstName());
-							textview7.setText(response.body()
-									.getLastName());
+		View.OnClickListener l = new View.OnClickListener() {
 
-						} else {
-							new AlertDialog.Builder(UserDetailActivity.this).setMessage("BŁĄÐ")
-									.show();
-						}
-						System.out.println(response.body());
-						Timber.d("Connection successful %s", response);
-					}
+			@Override
+			public void onClick(View v) {
+				update(v);
+			}
+		};
+		button.setOnClickListener(l);
 
-					@Override
-					public void onFailure(Call<User> call, Throwable t) {
-						Timber.d("Connection failed");
-					}
-				});
 	}
 
 	private void update(View view) {

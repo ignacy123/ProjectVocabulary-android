@@ -4,6 +4,10 @@ import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
 
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.util.List;
+
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,10 +16,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.Path;
-
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.util.List;
 
 /**
  * Network service singleton
@@ -79,6 +79,11 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 
 	@Override
 	public Call<User> register(@Body RegistrationDto dto) {
+		return service.register(dto);
+	}
+
+	@Override
+	public Call<User> register(@Body RegistrationWithUidDto dto) {
 		return service.register(dto);
 	}
 
