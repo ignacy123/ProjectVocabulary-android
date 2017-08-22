@@ -1,4 +1,4 @@
-package com.example.projectvocabulary.preferences;
+package com.example.projectvocabulary.constants;
 
 /**
  * Created by ignacy on 25.07.17.

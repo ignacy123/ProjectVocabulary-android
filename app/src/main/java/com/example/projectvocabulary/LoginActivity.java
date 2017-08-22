@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,7 @@ import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
-import com.example.projectvocabulary.preferences.Preferences;
+import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.sql.UserRepository;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ import timber.log.Timber;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor> {
 
 	/**
 	 * Id to identity READ_CONTACTS permission request.
@@ -80,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		ButterKnife.bind(this);
 		Timber.plant(new Timber.DebugTree());
 
-		api = ProjectVocabularyApiImpl.getInstance();
+		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
 
 		// Set up the login form.
 
@@ -192,7 +191,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 						@Override
 						public void onFailure(Call<User> call, Throwable t) {
 							showProgress(false);
+
 							Timber.d("Connection failed");
+
 						}
 					});
 		}

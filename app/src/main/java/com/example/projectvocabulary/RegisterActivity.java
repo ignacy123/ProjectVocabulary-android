@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -24,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.helper.StringUtils;
@@ -46,7 +49,7 @@ import timber.log.Timber;
  * A login screen that offers login via email/password.
  */
 
-public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends BaseActivity implements LoaderCallbacks<Cursor> {
 
 	@BindView(R.id.editText)
 	EditText uid;
@@ -90,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 		ButterKnife.bind(this);
 		// Set up the login form.
 
-		api = ProjectVocabularyApiImpl.getInstance();
+		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
 
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -101,11 +104,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			}
 		});
 
-		mLoginFormView = findViewById(R.id.login_form);
-		mProgressView = findViewById(R.id.login_progress);
+		mLoginFormView = findViewById(R.id.register_form);
+		mProgressView = findViewById(R.id.register_progress);
 	}
 
 	private void attemptLogin() {
+		showProgress(true);
 		if (!StringUtils.isEmpty(uid.getText()
 				.toString())) {
 			RegistrationWithUidDto dto = new RegistrationWithUidDto();
@@ -360,5 +364,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			showProgress(false);
 		}
 	}
+
 }
 

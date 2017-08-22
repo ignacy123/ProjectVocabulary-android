@@ -1,19 +1,22 @@
 package com.example.projectvocabulary;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
-import com.example.projectvocabulary.preferences.Preferences;
 import com.example.projectvocabulary.sql.UserRepository;
 
 import butterknife.BindView;
@@ -23,7 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class UserDetailActivity extends AppCompatActivity {
+public class UserDetailActivity extends BaseActivity {
 
 	@BindView(R.id.textView3)
 	TextView textview3;
@@ -39,6 +42,10 @@ public class UserDetailActivity extends AppCompatActivity {
 	TextView edittext8;
 	@BindView(R.id.button4)
 	Button button;
+	@BindView(R.id.detail_form)
+	View detail;
+	@BindView(R.id.detail_progress)
+	View progress;
 
 	ProjectVocabularyApi api;
 
@@ -49,7 +56,7 @@ public class UserDetailActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
 		ButterKnife.bind(this);
-		api = ProjectVocabularyApiImpl.getInstance();
+		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		userId = sharedPref.getLong(Preferences.USER_ID, 0);
 		User user = UserRepository.getInstance(this)
@@ -80,12 +87,13 @@ public class UserDetailActivity extends AppCompatActivity {
 
 		user.setLastName(edittext8.getText()
 				.toString());
-
+		showProgress(true);
 		api.update(userId, user)
 				.enqueue(new Callback<User>() {
 
 					@Override
 					public void onResponse(Call<User> call, Response<User> response) {
+						showProgress(false);
 						if (response.isSuccessful()) {
 							Log.d("TAG", response.body()
 									.getEmail());
@@ -99,9 +107,50 @@ public class UserDetailActivity extends AppCompatActivity {
 
 					@Override
 					public void onFailure(Call<User> call, Throwable t) {
+						showProgress(false);
 						Timber.d("Connection failed");
 					}
 				});
 
 	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+			detail.setVisibility(show ? View.GONE : View.VISIBLE);
+			detail.animate()
+					.setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							detail.setVisibility(show ? View.GONE : View.VISIBLE);
+						}
+					});
+			System.out.println("at this point progress bar should appear");
+			progress.setVisibility(show ? View.VISIBLE : View.GONE);
+			progress.animate()
+					.setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							progress.setVisibility(show ? View.VISIBLE : View.GONE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			progress.setVisibility(show ? View.VISIBLE : View.GONE);
+			detail.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
+	}
+
 }

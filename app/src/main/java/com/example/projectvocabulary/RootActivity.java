@@ -34,7 +34,7 @@ public class RootActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_root);
 		ButterKnife.bind(this);
 		fab.setOnClickListener(v -> fabtoolbar.show());
-		api = ProjectVocabularyApiImpl.getInstance();
+		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
 		Timber.plant(new Timber.DebugTree());
 
 		View.OnClickListener oneClickListener = new View.OnClickListener() {
