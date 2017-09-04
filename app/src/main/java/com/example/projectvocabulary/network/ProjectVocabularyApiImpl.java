@@ -6,6 +6,7 @@ import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.interceptors.NetworkFailureInterceptor;
+import com.example.projectvocabulary.network.interceptors.UnauthorizedInterceptor;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -52,6 +53,7 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 		OkHttpClient client = new OkHttpClient.Builder().addInterceptor(logging)
 				.cookieJar(cookieJar)
 				.addInterceptor(new NetworkFailureInterceptor(context))
+				.addInterceptor(new UnauthorizedInterceptor(context))
 				.build();
 		Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.43.125:8080/projectvocabulary/")
 				.addConverterFactory(GsonConverterFactory.create())

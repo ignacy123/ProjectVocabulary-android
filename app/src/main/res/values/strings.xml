@@ -25,4 +25,7 @@
     <string name="new_email">Your new email:</string>
     <string name="new_fir_name">Your new first name:</string>
     <string name="new_las_name">Your new last name:</string>
+    <string name="cred_changed">Your credentials have changed. If you want to contiue using the application you need to log in again.</string>
+    <string name="conn_failed">Connection failed. Try again later</string>
+    <string name="not_connected">Your device is not connected to the internet.</string>
 </resources>

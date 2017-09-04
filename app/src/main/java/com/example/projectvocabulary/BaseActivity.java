@@ -27,10 +27,10 @@ public class BaseActivity extends AppCompatActivity {
 			ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo netInfo = cm.getActiveNetworkInfo();
 			if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-				text = "Connection failed. Try again later";
+				text = getString(R.string.conn_failed);
 
 			} else {
-				text = "Your device is not connected to the internet.";
+				text = getString(R.string.not_connected);
 			}
 			int duration = Toast.LENGTH_SHORT;
 
@@ -44,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
 		super.onResume();
 		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
 		manager.registerReceiver(receiver, new IntentFilter(Broadcasts.NETWORK_FAILURE));
+		manager.registerReceiver(logOutReceiver, new IntentFilter(Broadcasts.LOGOUT));
 	}
 
 	@Override
@@ -51,6 +52,23 @@ public class BaseActivity extends AppCompatActivity {
 		super.onPause();
 		LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
 		manager.unregisterReceiver(receiver);
+		manager.unregisterReceiver(logOutReceiver);
 
 	}
+
+	BroadcastReceiver logOutReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			CharSequence text = getString(R.string.cred_changed);
+			int duration = Toast.LENGTH_LONG;
+
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+			Intent intentTwo = new Intent(context, LoginActivity.class);
+			startActivity(intentTwo);
+		}
+	};
+
 }

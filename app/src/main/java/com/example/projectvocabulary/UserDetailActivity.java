@@ -133,7 +133,6 @@ public class UserDetailActivity extends BaseActivity {
 							detail.setVisibility(show ? View.GONE : View.VISIBLE);
 						}
 					});
-			System.out.println("at this point progress bar should appear");
 			progress.setVisibility(show ? View.VISIBLE : View.GONE);
 			progress.animate()
 					.setDuration(shortAnimTime)

@@ -6,4 +6,5 @@ package com.example.projectvocabulary.constants;
 
 public interface Broadcasts {
 	String NETWORK_FAILURE = "NETWORK_FAILURE";
+	String LOGOUT = "LOGOUT";
 }

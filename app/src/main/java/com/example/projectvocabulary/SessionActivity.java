@@ -100,8 +100,8 @@ public class SessionActivity extends BaseActivity {
 											public void onResponse(Call<User> call, Response<User> response) {
 
 												showProgress(false);
-												User user = response.body();
 												if (response.isSuccessful()) {
+													User user = response.body();
 													Log.d("TAG", user.getEmail());
 
 													SharedPreferences sharedPref =
@@ -128,7 +128,6 @@ public class SessionActivity extends BaseActivity {
 													startActivity(intent);
 
 												}
-												System.out.println(user);
 												Timber.d("Connection successful %s", response);
 											}
 
