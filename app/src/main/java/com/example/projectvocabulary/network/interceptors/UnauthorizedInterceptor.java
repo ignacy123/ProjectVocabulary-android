@@ -27,15 +27,17 @@ import okhttp3.Response;
 public class UnauthorizedInterceptor implements Interceptor {
 
 	private final LocalBroadcastManager manager;
+	private Context context;
 	ProjectVocabularyApi api;
 	UserRepository repository;
 	SharedPreferences sharedPref;
 
 	public UnauthorizedInterceptor(Context context) {
-		api = ProjectVocabularyApiImpl.getInstance(context);
+
 		repository = UserRepository.getInstance(context);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 		manager = LocalBroadcastManager.getInstance(context);
+		this.context = context;
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class UnauthorizedInterceptor implements Interceptor {
 			String email = repository.fetch()
 					.getEmail();
 			String password = sharedPref.getString(Preferences.PASSWORD, "");
-			retrofit2.Response<User> loginResponse = api.login(new LoginRequestDto(email, password))
+			retrofit2.Response<User> loginResponse = getApi().login(new LoginRequestDto(email, password))
 					.execute();
 			if (loginResponse.isSuccessful()) {
 				User user = loginResponse.body();
@@ -66,5 +68,12 @@ public class UnauthorizedInterceptor implements Interceptor {
 			}
 		}
 		return response;
+	}
+
+	private ProjectVocabularyApi getApi() {
+		if(api == null){
+			api = ProjectVocabularyApiImpl.getInstance(context);
+		}
+		return api;
 	}
 }

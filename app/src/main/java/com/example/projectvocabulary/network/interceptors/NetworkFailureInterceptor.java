@@ -27,7 +27,7 @@ public class NetworkFailureInterceptor implements Interceptor {
 	public Response intercept(Chain chain) throws IOException {
 		try {
 			Response response = chain.proceed(chain.request());
-			if (!response.isSuccessful()) {
+			if (!response.isSuccessful() && response.code() != 401 && response.code() != 400) {
 				manager.sendBroadcast(new Intent(Broadcasts.NETWORK_FAILURE));
 			}
 			return response;
