@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
 import com.github.fafaldo.fabtoolbar.widget.FABToolbarLayout;
 
 import butterknife.BindView;
@@ -34,7 +34,8 @@ public class RootActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_root);
 		ButterKnife.bind(this);
 		fab.setOnClickListener(v -> fabtoolbar.show());
-		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
+		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		api = locator.getProjectVocabularyApi();
 		Timber.plant(new Timber.DebugTree());
 
 		View.OnClickListener oneClickListener = new View.OnClickListener() {

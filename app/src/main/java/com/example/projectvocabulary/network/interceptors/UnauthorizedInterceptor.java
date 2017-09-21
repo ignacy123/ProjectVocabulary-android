@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.constants.Broadcasts;
 import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
@@ -14,6 +15,7 @@ import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
 import com.example.projectvocabulary.sql.UserRepository;
+import com.example.projectvocabulary.sql.UserRepositoryImpl;
 
 import java.io.IOException;
 
@@ -27,17 +29,17 @@ import okhttp3.Response;
 public class UnauthorizedInterceptor implements Interceptor {
 
 	private final LocalBroadcastManager manager;
-	private Context context;
+	ServiceLocator locator;
 	ProjectVocabularyApi api;
 	UserRepository repository;
 	SharedPreferences sharedPref;
 
-	public UnauthorizedInterceptor(Context context) {
+	public UnauthorizedInterceptor(ServiceLocator locator) {
 
-		repository = UserRepository.getInstance(context);
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-		manager = LocalBroadcastManager.getInstance(context);
-		this.context = context;
+		repository = locator.getUserRepository();
+		sharedPref = locator.getSharedPreferences();
+		manager = locator.getLocalBroadcastManager();
+		this.locator = locator;
 	}
 
 	@Override
@@ -72,7 +74,7 @@ public class UnauthorizedInterceptor implements Interceptor {
 
 	private ProjectVocabularyApi getApi() {
 		if(api == null){
-			api = ProjectVocabularyApiImpl.getInstance(context);
+			api = locator.getProjectVocabularyApi();
 		}
 		return api;
 	}

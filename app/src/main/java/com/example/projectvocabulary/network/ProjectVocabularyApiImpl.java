@@ -1,7 +1,6 @@
 package com.example.projectvocabulary.network;
 
-import android.content.Context;
-
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
@@ -35,14 +34,14 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 
 	private User user = new User();
 
-	public static final ProjectVocabularyApi getInstance(Context context) {
+	public static final ProjectVocabularyApi getInstance(ServiceLocator locator) {
 		if (instance == null) {
-			instance = new ProjectVocabularyApiImpl(context);
+			instance = new ProjectVocabularyApiImpl(locator);
 		}
 		return instance;
 	}
 
-	private ProjectVocabularyApiImpl(Context context) {
+	private ProjectVocabularyApiImpl(ServiceLocator locator) {
 		HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 		logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -52,8 +51,8 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 
 		OkHttpClient client = new OkHttpClient.Builder().addInterceptor(logging)
 				.cookieJar(cookieJar)
-				.addInterceptor(new NetworkFailureInterceptor(context))
-				.addInterceptor(new UnauthorizedInterceptor(context))
+				.addInterceptor(new NetworkFailureInterceptor(locator))
+				.addInterceptor(new UnauthorizedInterceptor(locator))
 				.build();
 		Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.43.125:8080/projectvocabulary/")
 				.addConverterFactory(GsonConverterFactory.create())

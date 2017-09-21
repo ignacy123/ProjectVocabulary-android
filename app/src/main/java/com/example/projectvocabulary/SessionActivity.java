@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
@@ -42,7 +43,8 @@ public class SessionActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_session);
-		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
+		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		api = locator.getProjectVocabularyApi();
 		Timber.plant(new Timber.DebugTree());
 		ButterKnife.bind(this);
 		getWordsAndStartSession();

@@ -13,11 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
-import com.example.projectvocabulary.sql.UserRepository;
+import com.example.projectvocabulary.sql.UserRepositoryImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,10 +57,11 @@ public class UserDetailActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
 		ButterKnife.bind(this);
-		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		api = locator.getProjectVocabularyApi();
+		SharedPreferences sharedPref = locator.getSharedPreferences();
 		userId = sharedPref.getLong(Preferences.USER_ID, 0);
-		User user = UserRepository.getInstance(this)
+		User user = locator.getUserRepository()
 				.fetch();
 		textview3.setText(user.getEmail());
 		textview5.setText(user.getFirstName());

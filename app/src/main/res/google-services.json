@@ -1,0 +1,42 @@
+
+  "project_info": {
+    "project_number": "479183007970",
+    "firebase_url": "https://projectvocabulary12.firebaseio.com",
+    "project_id": "projectvocabulary12",
+    "storage_bucket": "projectvocabulary12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479183007970:android:c22ecbbecc06561b",
+        "android_client_info": {
+          "package_name": "com.example.projectvocabulary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479183007970-l287s14usjrc1lceoen30di46qgl93da.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARjTrKMUjjyH89NnwXwY94_gYfZfXEEhM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

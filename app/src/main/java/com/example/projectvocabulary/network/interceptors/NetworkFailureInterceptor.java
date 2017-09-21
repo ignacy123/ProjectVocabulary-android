@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.constants.Broadcasts;
 
 import java.io.IOException;
@@ -19,8 +20,8 @@ public class NetworkFailureInterceptor implements Interceptor {
 
 	LocalBroadcastManager manager;
 
-	public NetworkFailureInterceptor(Context context) {
-		manager = LocalBroadcastManager.getInstance(context);
+	public NetworkFailureInterceptor(ServiceLocator locator) {
+		manager = locator.getLocalBroadcastManager();
 	}
 
 	@Override

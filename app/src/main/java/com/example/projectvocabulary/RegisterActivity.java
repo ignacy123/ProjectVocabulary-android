@@ -10,15 +10,12 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,12 +23,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.helper.StringUtils;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
 import com.example.projectvocabulary.network.RegistrationDto;
 import com.example.projectvocabulary.network.RegistrationWithUidDto;
 
@@ -93,7 +89,8 @@ public class RegisterActivity extends BaseActivity implements LoaderCallbacks<Cu
 		ButterKnife.bind(this);
 		// Set up the login form.
 
-		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
+		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		api = locator.getProjectVocabularyApi();
 
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {

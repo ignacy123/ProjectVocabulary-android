@@ -4,15 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.domain.user.User;
-import com.example.projectvocabulary.sql.UserRepository;
 
 public class StartActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		User user = UserRepository.getInstance(this)
+
+		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		User user = locator.getUserRepository()
 				.fetch();
 		if (user == null) {
 			Intent intent = new Intent(this, LoginActivity.class);

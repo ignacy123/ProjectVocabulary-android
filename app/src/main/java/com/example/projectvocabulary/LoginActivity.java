@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -24,11 +23,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
+import com.example.projectvocabulary.base.ServiceLocator;
+import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
-import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.sql.UserRepository;
 
 import java.util.ArrayList;
@@ -71,6 +70,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 	View mLoginFormView;
 
 	ProjectVocabularyApi api;
+	private SharedPreferences sharedPreferences;
+	private UserRepository userRepository;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 		ButterKnife.bind(this);
 		Timber.plant(new Timber.DebugTree());
 
-		api = ProjectVocabularyApiImpl.getInstance(getApplicationContext());
+		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		api = locator.getProjectVocabularyApi();
+		sharedPreferences = locator.getSharedPreferences();
+		userRepository = locator.getUserRepository();
 
 		// Set up the login form.
 
@@ -166,15 +170,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 							if (response.isSuccessful()) {
 								Log.d("TAG", user.getEmail());
 
-								SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-								SharedPreferences.Editor editor = sharedPref.edit();
+								SharedPreferences.Editor editor = sharedPreferences.edit();
 
 								editor.putLong(Preferences.USER_ID, user.getId());
 								editor.putString(Preferences.PASSWORD, password);
 								editor.commit();
 
-								UserRepository.getInstance(getApplicationContext())
-										.persist(user);
+								userRepository.persist(user);
 
 								Intent intent = new Intent(LoginActivity.this, RootActivity.class);
 
