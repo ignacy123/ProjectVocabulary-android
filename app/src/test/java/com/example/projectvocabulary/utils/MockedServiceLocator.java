@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
-
+import com.example.projectvocabulary.base.AppExecutors;
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.repositories.UserRepository;
@@ -57,5 +57,10 @@ public class MockedServiceLocator extends Application implements ServiceLocator 
 	@Override
 	public UserRepository getUserRepository() {
 		return mockedUserRepository;
+	}
+
+	@Override
+	public AppExecutors getAppExecutors() {
+		return new InstantAppExecutors();
 	}
 }

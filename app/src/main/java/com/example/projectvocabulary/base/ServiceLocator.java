@@ -21,4 +21,5 @@ public interface ServiceLocator {
 	Context getContext();
 	AppDatabase getAppDatabase();
 	UserRepository getUserRepository();
+	AppExecutors getAppExecutors();
 }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.example.projectvocabulary.base.AppExecutors;
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
@@ -63,6 +64,11 @@ public class MyApplication extends Application implements ServiceLocator {
 	@Override
 	public UserRepository getUserRepository() {
 		return UserRepositoryImpl.getInstance(this);
+	}
+
+	@Override
+	public AppExecutors getAppExecutors() {
+		return AppExecutors.getInstance();
 	}
 
 }

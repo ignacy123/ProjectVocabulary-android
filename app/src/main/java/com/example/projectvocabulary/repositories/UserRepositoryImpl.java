@@ -1,24 +1,18 @@
 package com.example.projectvocabulary.repositories;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
+import com.example.projectvocabulary.base.AppExecutors;
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
-import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.network.status.ApiResponse;
 import com.example.projectvocabulary.network.status.NetworkBoundResource;
 import com.example.projectvocabulary.network.status.Resource;
 import com.example.projectvocabulary.sql.UserDAO;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by ignacy on 28.09.17.
@@ -29,6 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
 	private static UserRepositoryImpl instance;
 	private ProjectVocabularyApi api;
 	private SharedPreferences preferences;
+	private AppExecutors appExecutors;
 
 	public static final UserRepository getInstance(ServiceLocator locator) {
 		if (instance == null) {
@@ -41,7 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public LiveData<Resource<User>> getUser() {
-		return new NetworkBoundResource<User, User>() {
+		return new NetworkBoundResource<User, User>(appExecutors) {
 
 			@Override
 			protected void saveCallResult(@NonNull User item) {
@@ -66,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
 				return api.usersLd(preferences.getLong(Preferences.USER_ID, -1));
 
 			}
-		}.getAsLiveData();
+		}.asLiveData();
 
 	}
 
@@ -74,5 +69,6 @@ public class UserRepositoryImpl implements UserRepository {
 		userDAO = locator.getUserDAO();
 		api = locator.getProjectVocabularyApi();
 		preferences = locator.getSharedPreferences();
+		appExecutors = locator.getAppExecutors();
 	}
 }

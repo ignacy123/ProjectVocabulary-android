@@ -5,8 +5,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-
 import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
@@ -17,20 +15,15 @@ import com.example.projectvocabulary.repositories.UserRepositoryImpl;
 import com.example.projectvocabulary.sql.UserDAO;
 import com.example.projectvocabulary.utils.ApiUtil;
 import com.example.projectvocabulary.utils.MockedServiceLocator;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by ignacy on 18.10.17.
  */
-
 public class UserRepositoryTest {
 
 	UserRepository repository;
@@ -49,7 +42,6 @@ public class UserRepositoryTest {
 
 	@Test
 	public void givesUser() {
-		when(asyncTask.execute()).thenReturn();
 		MutableLiveData<User> user = new MutableLiveData<>();
 		User returnedUser = new User();
 		returnedUser.setEmail("wew");
@@ -67,8 +59,5 @@ public class UserRepositoryTest {
 
 	@Rule
 	public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
-
-	@Mock
-	AsyncTask asyncTask;
 
 }
