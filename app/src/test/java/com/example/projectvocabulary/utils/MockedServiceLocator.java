@@ -20,20 +20,23 @@ import static org.mockito.Mockito.mock;
 public class MockedServiceLocator extends Application implements ServiceLocator {
 
 	private UserRepository mockedUserRepository = mock(UserRepository.class);
+	private UserDAO mockedUserDAO = mock(UserDAO.class);
+	private ProjectVocabularyApi mockedProjectVocabulary = mock(ProjectVocabularyApi.class);
+	private SharedPreferences mockedSharedPreferences = mock(SharedPreferences.class);
 
 	@Override
 	public ProjectVocabularyApi getProjectVocabularyApi() {
-		return null;
+		return mockedProjectVocabulary;
 	}
 
 	@Override
 	public UserDAO getUserDAO() {
-		return null;
+		return mockedUserDAO;
 	}
 
 	@Override
 	public SharedPreferences getSharedPreferences() {
-		return null;
+		return mockedSharedPreferences;
 	}
 
 	@Override
