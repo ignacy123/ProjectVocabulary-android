@@ -1,8 +1,11 @@
 package com.example.projectvocabulary.network;
 
+import android.arch.lifecycle.LiveData;
+
 import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
+import com.example.projectvocabulary.network.status.ApiResponse;
 
 import java.util.List;
 
@@ -24,6 +27,9 @@ public interface ProjectVocabularyApi {
 
 	@GET("users/{userId}")
 	Call<User> users(@Path("userId") Long userId);
+
+	@GET("users/{userId}")
+	LiveData<ApiResponse<User>> usersLd(@Path("userId") Long userId);
 
 	@POST("dictionary/session")
 	Call<List<SessionWord>> session(@Body SessionRequest request);

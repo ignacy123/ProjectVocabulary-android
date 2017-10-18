@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -28,7 +29,7 @@ import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.sql.UserRepository;
+import com.example.projectvocabulary.sql.UserDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
 	ProjectVocabularyApi api;
 	private SharedPreferences sharedPreferences;
-	private UserRepository userRepository;
+	private UserDAO userDAO;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
 		api = locator.getProjectVocabularyApi();
 		sharedPreferences = locator.getSharedPreferences();
-		userRepository = locator.getUserRepository();
+		userDAO = locator.getUserDAO();
 
 		// Set up the login form.
 
@@ -175,8 +176,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 								editor.putLong(Preferences.USER_ID, user.getId());
 								editor.putString(Preferences.PASSWORD, password);
 								editor.commit();
-
-								userRepository.persist(user);
+								HandlerThread thread = new HandlerThread("background");
+								thread.start();
+								new android.os.Handler(thread.getLooper()).post(() -> {
+									userDAO.persist(user);
+								});
 
 								Intent intent = new Intent(LoginActivity.this, RootActivity.class);
 

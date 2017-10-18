@@ -1,9 +1,7 @@
 package com.example.projectvocabulary.network.interceptors;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -13,9 +11,7 @@ import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.LoginRequestDto;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
-import com.example.projectvocabulary.sql.UserRepository;
-import com.example.projectvocabulary.sql.UserRepositoryImpl;
+import com.example.projectvocabulary.sql.UserDAO;
 
 import java.io.IOException;
 
@@ -31,12 +27,12 @@ public class UnauthorizedInterceptor implements Interceptor {
 	private final LocalBroadcastManager manager;
 	ServiceLocator locator;
 	ProjectVocabularyApi api;
-	UserRepository repository;
+	UserDAO repository;
 	SharedPreferences sharedPref;
 
 	public UnauthorizedInterceptor(ServiceLocator locator) {
 
-		repository = locator.getUserRepository();
+		repository = locator.getUserDAO();
 		sharedPref = locator.getSharedPreferences();
 		manager = locator.getLocalBroadcastManager();
 		this.locator = locator;
@@ -47,8 +43,7 @@ public class UnauthorizedInterceptor implements Interceptor {
 
 		Response response = chain.proceed(chain.request());
 		if (response.code() == 401) {
-			String email = repository.fetch()
-					.getEmail();
+			String email = "";// TODO
 			String password = sharedPref.getString(Preferences.PASSWORD, "");
 			retrofit2.Response<User> loginResponse = getApi().login(new LoginRequestDto(email, password))
 					.execute();
@@ -73,7 +68,7 @@ public class UnauthorizedInterceptor implements Interceptor {
 	}
 
 	private ProjectVocabularyApi getApi() {
-		if(api == null){
+		if (api == null) {
 			api = locator.getProjectVocabularyApi();
 		}
 		return api;

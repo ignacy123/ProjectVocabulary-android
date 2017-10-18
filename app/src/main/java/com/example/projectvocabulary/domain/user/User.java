@@ -1,16 +1,15 @@
 package com.example.projectvocabulary.domain.user;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
-import com.example.projectvocabulary.sql.UserColumns;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by ignacy on 14.06.17.
  */
+@Entity
+public class User {
 
-public class User implements UserColumns {
-
+	@PrimaryKey
 	Long id;
 	String email;
 	String firstName;
@@ -46,22 +45,6 @@ public class User implements UserColumns {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public ContentValues getContentValues() {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(FIRST_NAME, firstName);
-		contentValues.put(LAST_NAME, lastName);
-		contentValues.put(EMAIL, email);
-		contentValues.put(ID, id);
-		return contentValues;
-	}
-
-	public User(Cursor cursor) {
-		id = cursor.getLong(cursor.getColumnIndexOrThrow(ID));
-		email = cursor.getString(cursor.getColumnIndexOrThrow(EMAIL));
-		firstName = cursor.getString(cursor.getColumnIndexOrThrow(FIRST_NAME));
-		lastName = cursor.getString(cursor.getColumnIndexOrThrow(LAST_NAME));
 	}
 
 	public User() {

@@ -1,11 +1,15 @@
 package com.example.projectvocabulary.network;
 
+import android.arch.lifecycle.LiveData;
+
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.domain.user.SessionRequest;
 import com.example.projectvocabulary.domain.user.SessionWord;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.interceptors.NetworkFailureInterceptor;
 import com.example.projectvocabulary.network.interceptors.UnauthorizedInterceptor;
+import com.example.projectvocabulary.network.status.ApiResponse;
+import com.example.projectvocabulary.network.status.LiveDataCallAdapterFactory;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -56,6 +60,7 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 				.build();
 		Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.43.125:8080/projectvocabulary/")
 				.addConverterFactory(GsonConverterFactory.create())
+				.addCallAdapterFactory(new LiveDataCallAdapterFactory())
 				.client(client)
 				.build();
 
@@ -70,6 +75,11 @@ public class ProjectVocabularyApiImpl implements ProjectVocabularyApi {
 	@Override
 	public Call<User> users(@Path("userId") Long userId) {
 		return service.users(userId);
+	}
+
+	@Override
+	public LiveData<ApiResponse<User>> usersLd(@Path("userId") Long userId) {
+		return service.usersLd(userId);
 	}
 
 	@Override

@@ -5,8 +5,9 @@ import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.sql.UserRepository;
-import com.example.projectvocabulary.sql.UserRepositoryImpl;
+import com.example.projectvocabulary.repositories.UserRepository;
+import com.example.projectvocabulary.sql.AppDatabase;
+import com.example.projectvocabulary.sql.UserDAO;
 
 /**
  * Created by ignacy on 21.09.17.
@@ -14,8 +15,10 @@ import com.example.projectvocabulary.sql.UserRepositoryImpl;
 
 public interface ServiceLocator {
 	ProjectVocabularyApi getProjectVocabularyApi();
-	UserRepository getUserRepository();
+	UserDAO getUserDAO();
 	SharedPreferences getSharedPreferences();
 	LocalBroadcastManager getLocalBroadcastManager();
 	Context getContext();
+	AppDatabase getAppDatabase();
+	UserRepository getUserRepository();
 }

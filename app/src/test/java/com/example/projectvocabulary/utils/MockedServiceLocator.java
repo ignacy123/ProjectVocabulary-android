@@ -1,68 +1,58 @@
-package com.example.projectvocabulary;
+package com.example.projectvocabulary.utils;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
 import com.example.projectvocabulary.repositories.UserRepository;
-import com.example.projectvocabulary.repositories.UserRepositoryImpl;
 import com.example.projectvocabulary.sql.AppDatabase;
 import com.example.projectvocabulary.sql.UserDAO;
-import com.facebook.stetho.Stetho;
+
+import static org.mockito.Mockito.mock;
 
 /**
- * Created by ignacy on 28.04.17.
+ * Created by ignacy on 18.10.17.
  */
 
-public class MyApplication extends Application implements ServiceLocator {
+public class MockedServiceLocator extends Application implements ServiceLocator {
 
-	public void onCreate() {
-		super.onCreate();
-		Stetho.initializeWithDefaults(this);
-	}
-
-	public static ServiceLocator getServiceLocator(Application application) {
-		return (ServiceLocator) application;
-	}
+	private UserRepository mockedUserRepository = mock(UserRepository.class);
 
 	@Override
 	public ProjectVocabularyApi getProjectVocabularyApi() {
-		return ProjectVocabularyApiImpl.getInstance(this);
+		return null;
 	}
 
 	@Override
 	public UserDAO getUserDAO() {
-		return getAppDatabase().userDao();
+		return null;
 	}
 
 	@Override
 	public SharedPreferences getSharedPreferences() {
-		return PreferenceManager.getDefaultSharedPreferences(this);
+		return null;
 	}
 
 	@Override
 	public LocalBroadcastManager getLocalBroadcastManager() {
-		return LocalBroadcastManager.getInstance(this);
+		return null;
 	}
 
 	@Override
 	public Context getContext() {
-		return this;
+		return null;
 	}
 
 	@Override
 	public AppDatabase getAppDatabase() {
-		return AppDatabase.getInstance(this);
+		return null;
 	}
 
 	@Override
 	public UserRepository getUserRepository() {
-		return UserRepositoryImpl.getInstance(this);
+		return mockedUserRepository;
 	}
-
 }

@@ -3,22 +3,26 @@ package com.example.projectvocabulary;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.HandlerThread;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.constants.Preferences;
+import com.example.projectvocabulary.databinding.ActivityUserDetailBinding;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
-import com.example.projectvocabulary.network.ProjectVocabularyApiImpl;
-import com.example.projectvocabulary.sql.UserRepositoryImpl;
+import com.example.projectvocabulary.sql.UserDAO;
+import com.example.projectvocabulary.viewmodels.UserDetailActivityViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,14 +31,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.example.projectvocabulary.network.status.Status.ERROR;
+import static com.example.projectvocabulary.network.status.Status.SUCCESS;
+
 public class UserDetailActivity extends BaseActivity {
 
-	@BindView(R.id.textView3)
-	TextView textview3;
-	@BindView(R.id.textView5)
-	TextView textview5;
-	@BindView(R.id.textView7)
-	TextView textview7;
 	@BindView(R.id.editText6)
 	TextView edittext6;
 	@BindView(R.id.editText7)
@@ -48,24 +49,41 @@ public class UserDetailActivity extends BaseActivity {
 	@BindView(R.id.detail_progress)
 	View progress;
 
+	ActivityUserDetailBinding binding;
 	ProjectVocabularyApi api;
 
 	long userId;
+	UserDAO userDAO;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
+		binding = DataBindingUtil.setContentView(this, R.layout.activity_user_detail);
 		ButterKnife.bind(this);
 		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
+		UserDetailActivityViewModel viewModel = ViewModelProviders.of(this)
+				.get(UserDetailActivityViewModel.class);
 		api = locator.getProjectVocabularyApi();
+		userDAO = locator.getUserDAO();
 		SharedPreferences sharedPref = locator.getSharedPreferences();
 		userId = sharedPref.getLong(Preferences.USER_ID, 0);
-		User user = locator.getUserRepository()
-				.fetch();
-		textview3.setText(user.getEmail());
-		textview5.setText(user.getFirstName());
-		textview7.setText(user.getLastName());
+
+		viewModel.getUser()
+				.observe(this, resource -> {
+					User user = resource.data;
+					binding.setResource(resource);
+					//					showProgress(resource.status == LOADING);
+					if (resource.status == ERROR) {
+
+						Toast toast = Toast.makeText(this, "zepsulo sie", Toast.LENGTH_LONG);
+						toast.show();
+
+					}
+					if (resource.status == SUCCESS) {
+						binding.setUser(user);
+					}
+				});
 
 		View.OnClickListener l = new View.OnClickListener() {
 
@@ -99,6 +117,11 @@ public class UserDetailActivity extends BaseActivity {
 						if (response.isSuccessful()) {
 							Log.d("TAG", response.body()
 									.getEmail());
+							HandlerThread thread = new HandlerThread("background");
+							thread.start();
+							new android.os.Handler(thread.getLooper()).post(() -> {
+								userDAO.persist(response.body());
+							});
 						} else {
 							new AlertDialog.Builder(UserDetailActivity.this).setMessage("BŁĄÐ")
 									.show();
