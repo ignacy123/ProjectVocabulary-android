@@ -15,7 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.databinding.ActivityUserDetailBinding;
@@ -23,9 +24,6 @@ import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.sql.UserDAO;
 import com.example.projectvocabulary.viewmodels.UserDetailActivityViewModel;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +60,7 @@ public class UserDetailActivity extends BaseActivity {
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_user_detail);
 		ButterKnife.bind(this);
 		ServiceLocator locator = MyApplication.getServiceLocator(getApplication());
-		UserDetailActivityViewModel viewModel = ViewModelProviders.of(this)
+		UserDetailActivityViewModel viewModel = ViewModelProviders.of(this, locator.getViewModelFactory())
 				.get(UserDetailActivityViewModel.class);
 		api = locator.getProjectVocabularyApi();
 		userDAO = locator.getUserDAO();

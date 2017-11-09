@@ -1,6 +1,7 @@
 package com.example.projectvocabulary.utils;
 
 import android.app.Application;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
@@ -62,5 +63,10 @@ public class MockedServiceLocator extends Application implements ServiceLocator 
 	@Override
 	public AppExecutors getAppExecutors() {
 		return new InstantAppExecutors();
+	}
+
+	@Override
+	public ViewModelProvider.Factory getViewModelFactory() {
+		return null;
 	}
 }

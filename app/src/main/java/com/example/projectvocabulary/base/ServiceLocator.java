@@ -1,9 +1,9 @@
 package com.example.projectvocabulary.base;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
-
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
 import com.example.projectvocabulary.repositories.UserRepository;
 import com.example.projectvocabulary.sql.AppDatabase;
@@ -22,4 +22,5 @@ public interface ServiceLocator {
 	AppDatabase getAppDatabase();
 	UserRepository getUserRepository();
 	AppExecutors getAppExecutors();
+	ViewModelProvider.Factory getViewModelFactory();
 }

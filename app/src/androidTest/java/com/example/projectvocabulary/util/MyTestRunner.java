@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnitRunner;
 
-import com.example.projectvocabulary.MyApplication;
-
 public class MyTestRunner extends AndroidJUnitRunner {
 
 	@Override
@@ -13,6 +11,6 @@ public class MyTestRunner extends AndroidJUnitRunner {
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		System.setProperty("org.mockito.android.target", context.getCacheDir()
 				.getPath());
-		return super.newApplication(cl, MyApplication.class.getName(), context);
+		return super.newApplication(cl, MyTestApplication.class.getName(), context);
 	}
 }

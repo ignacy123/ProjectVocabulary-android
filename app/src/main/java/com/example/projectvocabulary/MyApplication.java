@@ -1,11 +1,13 @@
 package com.example.projectvocabulary;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-
 import com.example.projectvocabulary.base.AppExecutors;
 import com.example.projectvocabulary.base.ServiceLocator;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
@@ -70,5 +72,16 @@ public class MyApplication extends Application implements ServiceLocator {
 	public AppExecutors getAppExecutors() {
 		return AppExecutors.getInstance();
 	}
+
+	@Override
+	public ViewModelProvider.Factory getViewModelFactory() {
+		if (sDefaultFactory == null) {
+			sDefaultFactory = new ViewModelProviders.DefaultFactory(this);
+		}
+		return sDefaultFactory;
+	}
+
+	@SuppressLint("StaticFieldLeak")
+	private static ViewModelProviders.DefaultFactory sDefaultFactory;
 
 }
