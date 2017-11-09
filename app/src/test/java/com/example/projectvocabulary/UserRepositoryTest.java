@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.SharedPreferences;
+
 import com.example.projectvocabulary.constants.Preferences;
 import com.example.projectvocabulary.domain.user.User;
 import com.example.projectvocabulary.network.ProjectVocabularyApi;
@@ -15,11 +16,14 @@ import com.example.projectvocabulary.repositories.UserRepositoryImpl;
 import com.example.projectvocabulary.sql.UserDAO;
 import com.example.projectvocabulary.utils.ApiUtil;
 import com.example.projectvocabulary.utils.MockedServiceLocator;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by ignacy on 18.10.17.
@@ -54,6 +58,7 @@ public class UserRepositoryTest {
 		Observer observer = mock(Observer.class);
 		repository.getUser()
 				.observeForever(observer);
+		System.out.println(repository.getUser());
 		verify(observer).onChanged(Resource.loading(null));
 	}
 
